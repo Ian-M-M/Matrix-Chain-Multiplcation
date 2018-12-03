@@ -1,30 +1,39 @@
 import sys
 
 mem = dict()
+inf = sys.maxint
+mat = list
 
 
-def initalizeMem(n):
+def init(p):
+
+    n = len(p)
+    global mat
+    mat = p
 
     for i in range(1, n):
         for j in range(1, n):
+
             key = str(i) + "," + str(j)
-            mem.update({key: sys.maxint})
-    return mem
+
+            if i == j: mem.update({key: 0})
+            else: mem.update({key: inf})
 
 
-def MatrixChainOrder(p, i, j):
+def clean():
+    mem.clear()
 
-    if len(p) < 3:
-        return 0
+
+def MatrixChainOrder(i, j):
 
     key = str(i) + "," + str(j)
-    if mem[key] < sys.maxint:
-        return mem[key]
-    if i == j:
-        mem[key] = 0
+
+    if mem[key] < inf: return mem[key]
     else:
         for k in range(i, j):
-            q = MatrixChainOrder(p, i, k) + MatrixChainOrder(p, k + 1, j) + p[i-1] * p[k] * p[j]
-            if q < mem[key]:
-                mem[key] = q
+
+            q = MatrixChainOrder(i, k) + MatrixChainOrder(k + 1, j) + mat[i - 1] * mat[k] * mat[j]
+
+            if q < mem[key]: mem[key] = q
+
     return mem[key]

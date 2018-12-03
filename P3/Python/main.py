@@ -43,39 +43,47 @@ if flagDo == 1 or flagT == 1:
         if size < 3:
             print "El array no es valido, minimo necesito 3 elementos"
         else:
+            minTab = 0
+            minMem = 0
+            timeTab = 0
+            timeMem = 0
+
             if flagMem == 1:
                 memoization.clean()
                 memoization.init(arr)
 
             print "Size =>", size
-            print "Matrices =>", arr
             print ""
 
             if flagTab == 1:
 
-                if flagT == 1:
-                    etc.time.clock()
+                print "Computing Tabulation ..."
 
-                n = tabulation.MatrixChainOrder(arr, size)
+                if flagT == 1: etc.time.clock()
 
-                if flagT == 1:
-                    print "+ Tiempo por Tabulation => " + str(etc.time.clock())
-                    print ""
+                minTab = tabulation.MatrixChainOrder(arr, size)
 
-                if flagDo == 1:
-                    print "- min operaciones por Tabulation => " + str(n)
+                if flagT == 1: timeTab = etc.time.clock()
 
             if flagMem == 1:
 
-                print "- min operaciones por Memoization => ",
-                if flagT == 1:
-                    etc.time.clock()
+                print "Computing Memoization ..."
 
-                print memoization.MatrixChainOrder(1, size-1)
+                if flagT == 1: etc.time.clock()
 
-                if flagT == 1:
-                    print "+ Tiempo por Memoization => " + str(etc.time.clock())
-                    print ""
+                minMem = memoization.MatrixChainOrder(1, size-1)
+
+                if flagT == 1: timeMem = etc.time.clock()
+
+            print ""
+
+            if flagDo == 1:
+                if flagTab == 1: print "Min operations (Tabulation) => " + str(minTab)
+                if flagMem == 1: print "Min operations (Memoization) => " + str(minMem)
+            if flagT == 1:
+                if flagTab == 1: print "Time (Tabulation) => " + str(timeTab)
+                if flagMem == 1: print "Time (Memoization) => " + str(timeMem)
+
         print "--------------------------------------------------------"
 
 etc.cerrarFichero(fichero)

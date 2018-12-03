@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 public class Etc {
     // Flags
-    public static boolean f_flag=false, t_flag=false, di_flag=false, do_flag=false;
+    public static boolean f_flag=false, t_flag=false, di_flag=false, do_flag=false, tab_flag=false, mem_flag=false;
     public static String path="";
 
     
@@ -22,7 +22,7 @@ public class Etc {
     */
     public static void GetParam(String [] args){
         if (args.length==0) {
-            System.err.println("Sintaxis: main -f file -do|-di|-t");
+            System.err.println("Sintaxis: main -f file [-di] [-do|-t] [-mem|-tab]");
             System.exit(1);
         }
         for (int i = 0; i < args.length; i++) {
@@ -33,9 +33,16 @@ public class Etc {
             if(args[i].equals("-t"))t_flag=true;
             if(args[i].equals("-di"))di_flag=true;
             if(args[i].equals("-do"))do_flag=true;
+            if(args[i].equals("-tab"))tab_flag=true;
+            if(args[i].equals("-mem"))mem_flag=true;
         }
         if (!f_flag){
             System.err.println("Ha de introducir un fichero");
+            System.exit(1);
+        }
+        if (!tab_flag && !mem_flag){
+            System.err.println("Error: si se ha escogido -do o -t, se ha de "
+                    + "especificar -tab ('tabulation') o/y -mem ('memoization')");
             System.exit(1);
         }
     }
@@ -93,7 +100,6 @@ public class Etc {
     
     // Variables para medir el tiempo
     private static long timer;
-    private static double tiempoTranscurrido;
 
 
     /*
@@ -109,32 +115,30 @@ public class Etc {
       asigno un valor a "timer" hasta el momento actual y se guarada en la variable
       "tiempoTranscurrido".
     */
-    public static void ParaTimer(){
-        tiempoTranscurrido = (System.nanoTime() - timer)/(1000000000.);
+    public static double ParaTimer(){
+        return (System.nanoTime() - timer)/(1000000000.);
     }
     
     
     /*
       Output
     */
-    public static void Output(int [] matrix, long min_operations){
-        System.out.print("Matrix [" + matrix.length + "] => { ");
-        for (int i = 0; i < matrix.length; i++) {
-            System.out.print(matrix[i] + " ");
+    public static void Output(int [] matrix, long min_operations_tabulation, double timer_tabulation,
+                                             long min_operations_memoization, double timer_memoization){
+        
+        System.out.println("nº matrices => " + (matrix.length -1));
+        
+        if(do_flag){
+            if(tab_flag)System.out.println("minimo de operaciones (tabulation) => " + min_operations_tabulation);
+            if(mem_flag)System.out.println("minimo de operaciones (memoization) => " + min_operations_memoization);
         }
-        System.out.println("}");
-        System.out.println("minimo de operaciones => " + min_operations);
-        if(!t_flag)System.out.println("-------------------------------------------------");
-    }
-    
-    
-    /*
-      T_Output: imprime por pantalla el tiempo transcurrido desde que se llamo a
-      la funcion ComienzaTimer
-    */
-    public static void T_Output(){
-        DecimalFormat df = new DecimalFormat("#.######");
-        System.out.println("Tiempo => " + df.format(tiempoTranscurrido) + "s");
+        
+        if(t_flag){
+            DecimalFormat df = new DecimalFormat("#.######");
+            if(tab_flag)System.out.println("Tiempo (tabulation) => " + df.format(timer_tabulation) + "s");
+            if(mem_flag)System.out.println("Tiempo (memoization) => " + df.format(timer_memoization) + "s");
+        }
+        
         System.out.println("-------------------------------------------------");
     }
 }

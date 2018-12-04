@@ -3,63 +3,106 @@
 #include <string.h>
 #include <limits.h> 
 #include <glib.h>
+#include <errno.h>
 int i, j, k, L, q;
+char comma[1] = ",";
+char * key = NULL;
+int value;
+gpointer old_key = NULL;
+gpointer old_value = NULL;
+int realValue;
+char * realKey = NULL;
+char * keyString = NULL;
+int ilen, jlen;
+char i_str[12], j_str[12];
+extern GHashTable * map;
 
-GHashTable* map = NULL;
 
-/*
-int LOOKUPCHAIN (int array[], int i, int j, int m[][]) {
+int LOOKUPCHAIN (int array[], int i, int j) {
+	// HACER KEY
+	sprintf(i_str, "%d", i);
+	ilen = strlen(i_str);
+	sprintf(j_str, "%d", j);
+	jlen = strlen(j_str);
+	keyString = malloc((ilen + 1 + jlen + 1) * sizeof(char));
 
-	if (m[i][j] < INT_MAX)	return m[i][j];
-	if (i == j) {
-		m[i][j] = 0;
-	} 
-	for (k = i; k < j-1; k++) {
-		q = LOOKUPCHAIN(array,i,k) + LOOKUPCHAIN(array,k+1,j) + array[i-1]*array[k]*array[j]; 
-		if (q < m[i][j]) m[i][j] = q; 
-
+	if (keyString == NULL) { 
+		fprintf(stderr, " %s\n", strerror(errno));
+		exit(1);
 	}
-	return m[i][j];
-}
-*/
-int Memoization(int array[], int size)  { 
-	char i_str[12];
-	char j_str[12];
-	char * key = NULL;
-   	int * value = NULL;
-	char * old_key = NULL;
-   	int * old_value = NULL;
-	size_t ilen, jlen;
-	char *keystring;
-    map = g_hash_table_new (g_int_hash, g_int_equal);
-	key = malloc(sizeof(*key));
+
+	strcpy(keyString, i_str);
+	keyString[ilen] = comma[0];
+	keyString[ilen + 1 ] = '\0';
+	strcat(keyString,j_str);
+	key = strdup(keyString);
+	free(keyString);
+	// FIN HACER KEY
+
+	if ( g_hash_table_lookup_extended (map, key, &old_key, &old_value)) {
+		printf("hey");
+	} 
+	realValue = GPOINTER_TO_UINT(old_value);
+	printf("%d valor , %s key\n", realValue, key);
+
+	if (realValue < INT_MAX) return realValue;
 	
-   	for (i = 1; i < size; i++) {
+	for (k = i; k < j-1; k++) {
+
+		q = LOOKUPCHAIN(array,i,k) + LOOKUPCHAIN(array,k+1,j) + array[i-1]*array[k]*array[j];	
+		if (q < realValue) g_hash_table_insert (map, key, GINT_TO_POINTER (q));
+		printf("se ha insertado2 \n");
+	
+	}
+	if ( g_hash_table_lookup_extended (map, key, &old_key, &old_value)) {
+		realValue = GPOINTER_TO_INT(old_value);
+	}
+	return realValue;
+}
+
+void clean() {
+
+	g_hash_table_destroy (map);
+	map = NULL;
+}
+
+
+void initMemoization(int array[], int size) { 
+	
+	key = malloc(sizeof(*key));
+	for (i = 1; i <= size; i++) {
 		sprintf(i_str, "%d", i);
 		ilen = strlen(i_str);
-		for (j = i; j < size; j++  ) {
+		for (j = i; j <= size; j++  ) {
 			sprintf(j_str, "%d", j);
 			jlen = strlen(j_str);
-			keystring = malloc(ilen + jlen + 2);
-			strcpy(keystring, i_str);
-			keystring[ilen] = ",";
-			strcat(i_str,j_str);
-			
-			//Esto crea un pointer...
-			key = strdup(keystring);
-			
-			if (g_hash_table_lookup_extended (table, key, &old_key, &old_value)){
-            	/* Insert the new value */
-            	g_hash_table_insert (table, g_strdup (key), g_strdup (value));
-            	/* Just free the key and value */
-            	g_free (old_key);
-            	g_free (old_value);
+			keyString = malloc((ilen + 1 + jlen + 1) * sizeof(char));
+			if(keyString == NULL) { 
+				fprintf(stderr, " %s\n", strerror(errno));
+				exit(1);
+			}
+			strcpy(keyString, i_str);
+			keyString[ilen] = comma[0];
+			keyString[ilen + 1 ] = '\0';
+			strcat(keyString,j_str);
+			key = strdup(keyString);
+			free(keyString);   
+			// FIN HACER KEY
+			if (g_hash_table_lookup_extended (map, key, &old_key, &old_value)){
+            	realValue = GPOINTER_TO_UINT(old_value);
         	} else {
-            	/* Insert into our hash table it is not a duplicate. */
-            	g_hash_table_insert (table, g_strdup (key), g_strdup (value));
+				if (i == j) {
+					g_hash_table_insert (map, key, GINT_TO_POINTER (0));
+            	} else {
+					g_hash_table_insert (map, key, GINT_TO_POINTER (INT_MAX));
+				}
+				
+				if (g_hash_table_lookup_extended (map, key, &old_key, &old_value)) {
+						realValue = GPOINTER_TO_UINT(old_value);
+						char * realKey = (char*)old_key;
+						printf( "%s => %d\n", realKey, realValue);
+				}
 			} 
 		}
     }
-
-	LOOKUPCHAIN (array, 1, size-1, m[0]);
 }

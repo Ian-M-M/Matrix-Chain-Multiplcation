@@ -1,20 +1,20 @@
 #include <stdio.h>
-#include <limits.h> 	
 #include <glib.h>
 //#include <stdbool.h>
 //#include "Etc.h"
 #include "Tabulation.h"
 #include "Memoization.h"
 GHashTable * map = NULL;
-int main(void) { 
-    int array[] = {10,20,30}; 
-    int size = sizeof(array)/sizeof(array[0]); 
-	//printf("Minimum number of multiplications is %d \n", Tabulation(array, size)); 
-	map = g_hash_table_new_full (g_str_hash, g_int_equal, g_free, g_free);
-	initMemoization(array, size);
-	
-	printf("Minimum number of multiplications is %d \n", MatrixChainOrder(array, 1, size-1));
-	
-	//clean();
-    return 0; 
-} 
+
+int main(void) {
+    int array[] = {5,6,8,7,9,55,10};
+    int size = sizeof(array)/sizeof(array[0]);
+  	printf("[tabulation] Minimum number of multiplications is %d \n", Tabulation(array, size));
+
+  	initMemoization(array, size);
+  	printf("[memoization] Minimum number of multiplications is %d \n", MatrixChainOrder(1, size-1));
+    g_hash_table_foreach(map, (GHFunc)iterator, "%s -> %d\n");
+    clean();
+
+    return 0;
+}

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <limits.h> 	//este no sé para cual, pero para parametros creo
+#include <limits.h> 	
 #include <glib.h>
 //#include <stdbool.h>
 //#include "Etc.h"
@@ -7,13 +7,13 @@
 #include "Memoization.h"
 GHashTable * map = NULL;
 int main(void) { 
-    int array[] = {1, 2, 3, 4, 5, 6, 7}; 
+    int array[] = {10,20,30}; 
     int size = sizeof(array)/sizeof(array[0]); 
 	//printf("Minimum number of multiplications is %d \n", Tabulation(array, size)); 
-	map = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
+	map = g_hash_table_new_full (g_str_hash, g_int_equal, g_free, g_free);
 	initMemoization(array, size);
 	
-	printf(" MEMOIZATION - Minimum number of multiplications is %d \n", LOOKUPCHAIN (array, 1, size-1));
+	printf("Minimum number of multiplications is %d \n", MatrixChainOrder(array, 1, size-1));
 	
 	//clean();
     return 0; 

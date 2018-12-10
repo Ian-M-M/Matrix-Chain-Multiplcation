@@ -28,15 +28,15 @@ public class Main {
         
         prepareReader(); // preparamos un buffer que nos permitira leer de readMatrix()
             
-        while((matrix = readMatrix())!= null){
-            if(t_flag)ComienzaTimer(); // comenzamos a contar el tiempo de ejecucion
-            
+        while((matrix = readMatrix())!= null){          
             if(tab_flag){ // -tab ?
+                if(t_flag)ComienzaTimer(); // comenzamos a contar el tiempo de ejecucion
                 min_operations_tabulation = Tabulation.MatrixChainOrder(matrix, matrix.length); // algoritmo tabulation
                 if(t_flag)timer_tabulation=ParaTimer(); // calculamos el tiempo de ejecucion
             }
             
             if(mem_flag){ // -mem ?
+                if(t_flag)ComienzaTimer(); // comenzamos a contar el tiempo de ejecucion
                 init_memoization = new Memoization(matrix); // inicializamos el map que usa la memoization
                 min_operations_memoization = init_memoization.MatrixChainOrder(1, matrix.length-1); // algoritmo memoization
                 init_memoization.clean(); // reseteamos el map que usa la memoization

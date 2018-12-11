@@ -13,16 +13,7 @@ public class Main {
     
     public static void main(String[] args) {
         
-        String [] args_mio = new String [4];
-        args_mio[0]="-f";
-        args_mio[1]="../esclavo/pruebas.txt";
-        args_mio[2]="-tab";
-        args_mio[3]="-t";
-        //args_mio[4]="-do";
-        //args_mio[5]="-di";
-        //args_mio[6]="-mem";
-        
-        GetParam(args_mio); // leemos los parametros introducidos al programa
+        GetParam(args); // leemos los parametros introducidos al programa
         if(di_flag)Input(); // debug input
         if(!do_flag && !t_flag)System.exit(0);
         

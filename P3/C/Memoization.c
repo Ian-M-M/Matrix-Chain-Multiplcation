@@ -57,7 +57,7 @@ void clean() {
 void initMemoization(int array[], int size) {
 	int i, j;
   	matrix=array;
-  	map=g_hash_table_new(g_int_hash, g_int_equal);// Creación mapa
+  	map=g_hash_table_new(g_str_hash, g_int_equal);// Creación mapa
 
 	for (i = 1; i < size; i++) {
 		sprintf(i_str, "%d", i); // i_str=(char*) i

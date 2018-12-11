@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <glib.h>
 
@@ -14,34 +15,34 @@ void iterator(gpointer key, gpointer value, gpointer user_data) {
 }
 
 int MatrixChainOrder (int i, int j) {
-  int k;
-  sprintf(i_str, "%d", i); //i_str=(char*) i
-  i_len = strlen(i_str); //i_len=nº de digitos en i
+	int k;
+	sprintf(i_str, "%d", i); // i_str=(char*) i
+  	i_len = strlen(i_str); // i_len=nº de digitos en i
 
-  sprintf(j_str, "%d", j); //j_str=(char*) j
-  j_len = strlen(j_str); //j_len=nº de digitos en j
+  	sprintf(j_str, "%d", j); // j_str=(char*) j
+  	j_len = strlen(j_str); // j_len=nº de digitos en j
 
-  //* comenzamos a crear key *//
-  buffer = malloc((i_len + 1 + j_len + 1) * sizeof(char)); //reservamos espacio
-  if(buffer == NULL) exit(1);
-  snprintf(buffer, sizeof buffer, "%s%c%s", i_str, comma, j_str); //concatenamos para crear la key
-  char * key = strdup(buffer); //clonamos el contenido de buffer en key
-  free(buffer);
-  //* --------fin key------- *//
+  	//* Comienzo creacion key *//
+  	buffer = malloc((i_len + 1 + j_len + 1) * sizeof(char)); // Reservacion del espacio
+  	if(buffer == NULL) exit(1);
+  	snprintf(buffer, sizeof buffer, "%s%c%s", i_str, comma, j_str); // Concatenacion para crear la key
+  	char * key = strdup(buffer); // Clonacion del contenido de buffer en key
+  	free(buffer);
+  	//* --------fin key------- *//
 
-  int value = GPOINTER_TO_INT(g_hash_table_lookup (map, key)); //value=map.getValue(key)
+  	int value = GPOINTER_TO_INT(g_hash_table_lookup (map, key)); // value=map.getValue(key)
 	if (value < INT_MAX) {
 		return value;
 	}
 
 	for (k = i; k < j; k++) {
 		int q = MatrixChainOrder(i,k) +
-        MatrixChainOrder(k+1,j) +
-        matrix[i-1]*matrix[k]*matrix[j];
-    value = GPOINTER_TO_INT(g_hash_table_lookup (map, key)); //value=map.getValue(key)
+        	MatrixChainOrder(k+1,j) +
+        	matrix[i-1]*matrix[k]*matrix[j];
+    	value = GPOINTER_TO_INT(g_hash_table_lookup (map, key)); // value=map.getValue(key)
 		if (q < value){
-			g_hash_table_insert (map, key, GINT_TO_POINTER (q)); //map[key]=q
-    }
+			g_hash_table_insert (map, key, GINT_TO_POINTER (q)); // map[key]=q
+    	}
 
 	}
 
@@ -54,30 +55,29 @@ void clean() {
 }
 
 void initMemoization(int array[], int size) {
-  int i, j;
-  matrix=array;
-  map=g_hash_table_new(g_int_hash, g_int_equal);//creamos map
+	int i, j;
+  	matrix=array;
+  	map=g_hash_table_new(g_int_hash, g_int_equal);// Creación mapa
 
 	for (i = 1; i < size; i++) {
-		sprintf(i_str, "%d", i); //i_str=(char*) i
-		i_len = strlen(i_str); //i_len=nº de digitos en i
+		sprintf(i_str, "%d", i); // i_str=(char*) i
+		i_len = strlen(i_str); // i_len=nº de digitos en i
 
 		for (j = i; j < size; j++  ) {
-			sprintf(j_str, "%d", j); //j_str=(char*) j
-			j_len = strlen(j_str); //j_len=nº de digitos en j
+			sprintf(j_str, "%d", j); // j_str=(char*) j
+			j_len = strlen(j_str); // j_len=nº de digitos en j
 
-      //* comenzamos a crear key *//
-			buffer = malloc((i_len + 1 + j_len + 1) * sizeof(char)); //reservamos espacio
-      if(buffer == NULL) exit(1);
-      snprintf(buffer, sizeof buffer, "%s%c%s", i_str, comma, j_str); //concatenamos para crear la key
-      //* -------fin key-------- *//
+      		//* Comienzo creacion key *//
+			buffer = malloc((i_len + 1 + j_len + 1) * sizeof(char)); // Reservacion del espacio
+      		if(buffer == NULL) exit(1);
+      		snprintf(buffer, sizeof buffer, "%s%c%s", i_str, comma, j_str); // Concatenacion para crear la key
+      		//* -------fin key-------- *//
 
-      //cuando i=j ? map[i,j]=0 : map[i,j]=INT_MAX
+      	// Cuando i=j ? map[i,j]=0 : map[i,j]=INT_MAX
     	(i == j) ? g_hash_table_insert (map, strdup(buffer), GINT_TO_POINTER (0))
       : g_hash_table_insert (map, strdup(buffer), GINT_TO_POINTER (INT_MAX));
 
-      free(buffer); //liberamos espacio buffer
+      free(buffer); // Liberacion espacio buffer
 		}
-  }
-
+	}
 }

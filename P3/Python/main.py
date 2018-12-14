@@ -17,7 +17,7 @@ path = args.file
 fichero = etc.abrirFichero(path)
 
 if flagDi == 1:
-    print "Nombre del fichero: " + path + "\n"
+    print "File name: " + path + "\n"
     for linea in fichero:
         print linea
     etc.cerrarFichero(fichero)
@@ -52,12 +52,9 @@ if flagDo == 1 or flagT == 1:
                 memoization.clean()
                 memoization.init(arr)
 
-            print "Size =>", size
-            print ""
+            print "n matrices => " + str(size-1)
 
             if flagTab == 1:
-
-                print "Computing Tabulation ..."
 
                 if flagT == 1: etc.time.clock()
 
@@ -67,22 +64,21 @@ if flagDo == 1 or flagT == 1:
 
             if flagMem == 1:
 
-                print "Computing Memoization ..."
-
                 if flagT == 1: etc.time.clock()
 
                 minMem = memoization.MatrixChainOrder(1, size-1)
 
                 if flagT == 1: timeMem = etc.time.clock()
 
-            print ""
-
             if flagDo == 1:
-                if flagTab == 1: print "Min operations (Tabulation) => " + str(minTab)
-                if flagMem == 1: print "Min operations (Memoization) => " + str(minMem)
+                if flagTab == 1: print "minimo de operaciones (Tabulation) => " + str(minTab)
+                if flagMem == 1: print "minimo de operaciones (Memoization) => " + str(minMem)
             if flagT == 1:
-                if flagTab == 1: print "Time (Tabulation) => " + str(timeTab)
-                if flagMem == 1: print "Time (Memoization) => " + str(timeMem)
+                if flagTab == 1: print "Tiempo (Tabulation) => " + str(timeTab) + " s"
+                if flagMem == 1: print "Tiempo (Memoization) => " + str(timeMem) + " s"
+            if timeTab > 120 or timeMem > 120:
+                print "Max time"
+                exit 0
 
         print "--------------------------------------------------------"
 

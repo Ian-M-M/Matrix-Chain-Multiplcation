@@ -14,7 +14,7 @@ public class Etc {
     public static boolean f_flag=false, t_flag=false, di_flag=false, do_flag=false, tab_flag=false, mem_flag=false;
     public static String path="";
 
-    
+
     /*
       GetParam(String[]args): Lee los parametros pasados al programa, por medio
       del array "args". De esta forma se identifican y se activan los flags
@@ -46,8 +46,8 @@ public class Etc {
             System.exit(1);
         }
     }
-    
-    
+
+
     /*
       Input(): Es llamado cuando se usa la opcion -di. Tiene la funcion de mostrar
       por pantalla el contenido del fichero pasado al programa por parametros.
@@ -65,20 +65,27 @@ public class Etc {
             System.err.println("Error al leer del buffer");
         }
     }
-    
-    
+
+    // Buffer usado para leer los arrays del fichero pasado por param al programa.
     private static BufferedReader br;
-    
+
+    /*
+      prepareReader(): Inicializa en br, un BufferedReader con el contenido del
+      fichero pasado por parámetro al programa.
+    */
     public static void prepareReader(){
         try{
-            FileReader fichero = new FileReader(path); 
+            FileReader fichero = new FileReader(path);
             br = new BufferedReader(fichero);// cargamos el fichero en un buffer
         } catch (FileNotFoundException ex) {
-            System.err.println("Error al leer input");
+            System.err.println("Error al leer del input");
         }
-        
+
     }
-    
+
+    /*
+      readMatrix(): devuelve una matriz leida del BufferedReader br.
+    */
     public static int [] readMatrix(){
         int[] matrix=null;
         try {
@@ -97,7 +104,7 @@ public class Etc {
         }
         return matrix;
     }
-    
+
     // Variables para medir el tiempo
     private static long timer;
 
@@ -112,33 +119,36 @@ public class Etc {
 
     /*
       ParaTimer(): Calcula el tiempo transcurrido desde el momento en que se
-      asigno un valor a "timer" hasta el momento actual y se guarada en la variable
-      "tiempoTranscurrido".
+      asigno un valor a "timer" hasta el momento actual y lo devuelve.
     */
     public static double ParaTimer(){
         return (System.nanoTime() - timer)/(1000000000.);
     }
-    
-    
+
+
     /*
-      Output
+      Output(int [] matrix, long min_operations_tabulation, double timer_tabulation,
+                            long min_operations_memoization, double timer_memoization):
+      Imprime por pantalla el minimo de operaciones realizadas en tabulacion y/o
+      en memoizacion, y/o los tiempos que tardan en ejecutarse la tabulacion y/o
+      la memoizacion, dependiendo de los flags activados.
     */
     public static void Output(int [] matrix, long min_operations_tabulation, double timer_tabulation,
                                              long min_operations_memoization, double timer_memoization){
-        
+
         System.out.println("nº matrices => " + (matrix.length -1));
-        
+
         if(do_flag){
             if(tab_flag)System.out.println("minimo de operaciones (tabulation) => " + min_operations_tabulation);
             if(mem_flag)System.out.println("minimo de operaciones (memoization) => " + min_operations_memoization);
         }
-        
+
         if(t_flag){
             DecimalFormat df = new DecimalFormat("#.######");
             if(tab_flag)System.out.println("Tiempo (tabulation) => " + df.format(timer_tabulation) + "s");
             if(mem_flag)System.out.println("Tiempo (memoization) => " + df.format(timer_memoization) + "s");
         }
-        
+
         System.out.println("-------------------------------------------------");
     }
 }

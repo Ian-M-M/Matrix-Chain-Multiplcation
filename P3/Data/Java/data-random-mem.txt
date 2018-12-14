@@ -1,0 +1,29 @@
+nº matrices => 100
+Tiempo (memoization) => 0,094613s
+-------------------------------------------------
+nº matrices => 200
+Tiempo (memoization) => 0,336221s
+-------------------------------------------------
+nº matrices => 300
+Tiempo (memoization) => 1,034517s
+-------------------------------------------------
+nº matrices => 400
+Tiempo (memoization) => 2,729622s
+-------------------------------------------------
+nº matrices => 500
+Tiempo (memoization) => 5,518938s
+-------------------------------------------------
+nº matrices => 900
+Tiempo (memoization) => 34,448212s
+-------------------------------------------------
+nº matrices => 1000
+Tiempo (memoization) => 49,08231s
+-------------------------------------------------
+nº matrices => 1500
+Tiempo (memoization) => 175,282643s
+-------------------------------------------------
+Max time
+Max time
+Max time
+Max time
+Max time
